@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>Widget-base-class by gicolek</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Widget-base-class</h1>
+        <h2>Widget Base Class, which facilitates custom widget creation updating the values in the background.</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/gicolek/Widget-Base-Class/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/gicolek/Widget-Base-Class/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/gicolek/Widget-Base-Class" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a id="widget-base-class" class="anchor" href="#widget-base-class" aria-hidden="true"><span class="octicon octicon-link"></span></a>Widget Base Class</h1>
+
+<h2>
+<a id="word-of-introduction" class="anchor" href="#word-of-introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Word of introduction</h2>
+
+<p>Widget Base Class is a PHP class which facilitates widget creation, by faster creationm sanitization, validation and updates of Widget fields. Such an approach lets one set up widgets much faster, without code repetitions and care for repeated data validation.</p>
+
+<p>Thanks to that we can get rid of the update method completely and stop worrying about the form validation itself.</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<h3>
+<a id="instatitaion" class="anchor" href="#instatitaion" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instatitaion</h3>
+
+<p>To use the base class, simply include it within your theme / plugin files and then extend it with the child class, in a same way as you extend WP_Widget class.</p>
+
+<p>For instance let's analyze the sample class which is a part of this repository</p>
+
+<p><code>
+class Sample_Widget_Base_Child extends Widget_Base {
+    function __construct() {
+        $this-&gt;text_fields = array( 'title' );
+        parent::__construct(
+                'sample_widget_base_child', // Base ID
+                __( 'Supply Widget Base Child', 'textdomain' ), // Name
+                array( 'description' =&gt; __( 'Sample Widget Base Child.', 'textdomain' ), ) // Args
+        );
+    }
+</code> </p>
+
+<p>Note that, we're using the parent constructor here and we're passing the arguments of the new widget we want to have available.</p>
+
+<h3>
+<a id="built-in-methods" class="anchor" href="#built-in-methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>Built in methods</h3>
+
+<p>The widget does all of the data validation on its own. However we have to define the fields we want to use, so that our base class would have an idea on what kind of fields we'd like to use.</p>
+
+<p>By default the class handles the following fields</p>
+
+<ul>
+<li>input</li>
+<li>checkbox </li>
+<li>select</li>
+<li>textarea</li>
+</ul>
+
+<p>Say we want to define the title of our widget. Let's take a look at our constructor</p>
+
+<p><code>
+    function __construct() {
+        $this-&gt;text_fields = array( 'title' );
+                /* some code here */
+        );
+    }
+</code> </p>
+
+<p>We have defined an array of text_fields, which are then automatically validated and rendered by the base class.
+In the same way we can define other fields. The class assumes their names go as follows:</p>
+
+<ul>
+<li>text_fields</li>
+<li>text_areas</li>
+<li>checkboxes</li>
+<li>select_fields</li>
+</ul>
+
+<p>Now we want to be sure that the text field is rendered on the Widget Dashboard place whenever we want it. Henceforth the parent <code>gti()</code> comes to help. We'll place it within our child class form method. </p>
+
+<p><code>public function form($instance) {
+        // generate the text input for the title of the widget. Note that the first parameter matches text_fields array entry
+        echo parent::gti(  'title', 'Title', $instance );
+    }
+</code> </p>
+
+<p>The method takes at least three arguments. The <strong>first</strong> one corresponds to the key within our text_fields array and serves as the inputs "name" and "id" attribute. The <strong>second</strong> one is the label of the input field. And the <strong>third</strong> one is the widget's instance. There are <strong>two</strong> more optional arguments "note" and a "class". The <strong>first</strong> one prints a nice side note below the field, which can serve as a helpful text for the end user. The <strong>second</strong> one assigns custom class to the input container.</p>
+
+<p>Similary the functions for other fields follow the same naming pattern: <strong>gt</strong> - generate textarea,  <strong>gtc</strong> - generate checkbox, <strong>gts</strong> - generate the select field. To find out the complete list of arguments and their use cases analyze the code of the base class: <a href="https://github.com/gicolek/Widget-Base-Class/blob/master/widget-base.php">https://github.com/gicolek/Widget-Base-Class/blob/master/widget-base.php</a></p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
