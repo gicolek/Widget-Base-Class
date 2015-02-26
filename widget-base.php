@@ -24,16 +24,22 @@ class Widget_Base extends WP_Widget {
 	 * @var Array of string
 	 */
 	public $select_fields = array();
+	
+	/**
+	 * @var form instance object
+	 */
+	public $form_instance = '';
 
 	/**
 	 * Register widget with WordPress.
 	 */
-	function __construct($id, $name, $args) {
+	function __construct($id, $name, $args, $controls) {
 
 		parent::__construct(
 				$id, // Base ID
 				$name, // Name
-				$args // Args
+				$args, // Args
+				$controls
 		);
 	}
 
@@ -43,9 +49,8 @@ class Widget_Base extends WP_Widget {
 	 * @param string $field widget field name
 	 * @param string $label
 	 * @param string $note field note to appear below
-	 * @param Object $instance widget instance
 	 */
-	public function gti($field, $label, $instance, $note = '', $class = '') {
+	public function gti($field, $label, $note = '', $class = '') {
 		?>
 		<p>
 			<label for="<?php echo $this->get_field_id( $field ); ?>">
@@ -54,7 +59,7 @@ class Widget_Base extends WP_Widget {
 			<input class="widefat <?php echo $class; ?>" 
 				   id="<?php echo $this->get_field_id( $field ); ?>" 
 				   name="<?php echo $this->get_field_name( $field ); ?>" type="text" 
-				   value="<?php echo esc_attr( $instance[$field] ); ?>" />
+				   value="<?php echo esc_attr( $this->form_instance[$field] ); ?>" />
 				   <?php if ( !empty( $note ) ): ?>
 				<small><?php echo $note; ?></small>
 			<?php endif; ?>
@@ -68,9 +73,8 @@ class Widget_Base extends WP_Widget {
 	 * @param string $field widget field name
 	 * @param string $label
 	 * @param string $note field note to appear below
-	 * @param Object $instance widget instance
 	 */
-	public function gt( $field, $label, $instance, $note = '') {
+	public function gt($field, $label, $note = '') {
 		?>
 		<p>
 			<label for="<?php echo $this->get_field_id( $field ); ?>">
@@ -78,7 +82,7 @@ class Widget_Base extends WP_Widget {
 			</label>
 			<textarea class="widefat" 
 					  id="<?php echo $this->get_field_id( $field ); ?>" 
-					  name="<?php echo $this->get_field_name( $field ); ?>"><?php echo esc_attr( $instance[$field] ); ?></textarea>
+					  name="<?php echo $this->get_field_name( $field ); ?>"><?php echo esc_attr( $this->form_instance[$field] ); ?></textarea>
 					  <?php if ( !empty( $note ) ): ?>
 				<small><?php echo $note; ?></small>
 			<?php endif; ?>
@@ -95,7 +99,7 @@ class Widget_Base extends WP_Widget {
 	 * @param Object $instance widget instance
 	 * @param Array_A $elements
 	 */
-	public function gtc( $field, $label, $instance, $elements, $note = '') {
+	public function gtc($field, $label, $elements, $note = '') {
 		?>
 		<div class="rpwe-multiple-check-form">
 			<p>
@@ -106,7 +110,7 @@ class Widget_Base extends WP_Widget {
 			<ul>
 				<?php foreach ( $elements as $key => $elem ) : ?>
 					<li>
-						<input type="checkbox" value="<?php echo esc_attr( $key ); ?>" id="<?php echo $this->get_field_id( $field ) . '-' . $elem; ?>" name="<?php echo $this->get_field_name( $field ); ?>[]" <?php checked( is_array( $instance[$field] ) && in_array( $key, $instance[$field] ) ); ?> />
+						<input type="checkbox" value="<?php echo esc_attr( $key ); ?>" id="<?php echo $this->get_field_id( $field ) . '-' . $elem; ?>" name="<?php echo $this->get_field_name( $field ); ?>[]" <?php checked( is_array( $this->form_instance[$field] ) && in_array( $key, $this->form_instance[$field] ) ); ?> />
 						<label for="<?php echo $this->get_field_id( $field ) . '-' . $elem; ?>">
 							<?php echo esc_attr( ucfirst( $elem ) ); ?>
 						</label>
@@ -128,10 +132,9 @@ class Widget_Base extends WP_Widget {
 	 * @param string $field widget field name
 	 * @param string $label
 	 * @param string $note field note to appear below
-	 * @param Object $instance widget instance
 	 * @param Array_A $elements
 	 */
-	public function gts( $field, $label, $instance, $elements, $note = '') {
+	public function gts($field, $label, $elements, $note = '') {
 		?>
 		<p>
 			<label for="<?php echo $this->get_field_id( $field ); ?>">
@@ -139,7 +142,7 @@ class Widget_Base extends WP_Widget {
 			</label>
 			<select class="widefat" id="<?php echo $this->get_field_id( $field ); ?>" name="<?php echo $this->get_field_name( $field ); ?>" style="width:100%;">
 				<?php foreach ( $elements as $key => $elem ) : ?>
-					<option value="<?php echo $key; ?>" <?php selected( $instance[$field], $key ); ?>><?php echo ucfirst( $elem ); ?></option>
+					<option value="<?php echo $key; ?>" <?php selected( $this->form_instance[$field], $key ); ?>><?php echo ucfirst( $elem ); ?></option>
 				</li>
 			<?php endforeach; ?>
 		</select>

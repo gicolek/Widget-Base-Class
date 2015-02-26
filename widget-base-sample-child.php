@@ -38,10 +38,8 @@ class Sample_Widget_Base_Child extends Widget_Base {
 		<h2 class="widget-title"><?php echo $title; ?></h2>
 		<?php
 		// do whatever you need here
-		
 		// close the widget container
 		echo $args['after_widget'];
-
 	}
 
 	/**
@@ -52,8 +50,9 @@ class Sample_Widget_Base_Child extends Widget_Base {
 	 * @param array $instance Previously saved values from database.
 	 */
 	public function form($instance) {
+		$this->form_instance = $instance;
 		// generate the text input for the title of the widget. Note that the first parameter matches text_fields array entry
-		echo parent::gti(  'title', 'Title', $instance );
+		echo parent::gti( 'title', 'Title' );
 	}
 
 }
