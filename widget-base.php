@@ -33,7 +33,7 @@ class Widget_Base extends WP_Widget {
 	/**
 	 * Register widget with WordPress.
 	 */
-	function __construct($id, $name, $args, $controls) {
+	function __construct($id, $name, $args = array(), $controls = array() ) {
 
 		parent::__construct(
 				$id, // Base ID
